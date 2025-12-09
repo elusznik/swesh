@@ -7,6 +7,7 @@ There are three modes:
 """
 
 import re
+import subprocess
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -134,7 +135,9 @@ class InteractiveAgent(DefaultAgent):
                 )
             self.config.mode = self._MODE_COMMANDS_MAPPING[user_input]
             console.print(f"Switched to [bold green]{self.config.mode}[/bold green] mode.")
-            return user_input
+        if user_input.startswith("!"):
+            subprocess.run(user_input[1:], shell=True)
+            return self._prompt_and_handle_special(prompt)
         return user_input
 
     def has_finished(self, output: dict[str, str]):

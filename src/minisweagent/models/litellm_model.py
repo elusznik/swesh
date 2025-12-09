@@ -35,6 +35,14 @@ class LitellmModelConfig:
 class LitellmModel:
     def __init__(self, *, config_class: Callable = LitellmModelConfig, **kwargs):
         self.config = config_class(**kwargs)
+        # Automatically disable cost tracking for known free models (e.g. OpenRouter free tier)
+        # to prevent "Model not mapped" errors.
+        if self.config.cost_tracking == "default" and self.config.model_name.endswith(":free"):
+            logger.info(
+                f"Model '{self.config.model_name}' detected as free model. Automatically disabling strict cost tracking."
+            )
+            self.config.cost_tracking = "ignore_errors"
+
         self.cost = 0.0
         self.n_calls = 0
         if self.config.litellm_model_registry and Path(self.config.litellm_model_registry).is_file():
