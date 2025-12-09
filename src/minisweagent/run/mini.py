@@ -8,6 +8,7 @@ import traceback
 from pathlib import Path
 from typing import Any
 
+import litellm
 import typer
 import yaml
 from prompt_toolkit.formatted_text import HTML
@@ -24,6 +25,9 @@ from minisweagent.models import get_model
 from minisweagent.run.extra.config import configure_if_first_time
 from minisweagent.run.utils.save import save_traj
 from minisweagent.utils.log import logger
+
+# Suppress noisy LiteLLM output
+litellm.suppress_debug_info = True
 
 DEFAULT_CONFIG = Path(os.getenv("MSWEA_MINI_CONFIG_PATH", builtin_config_dir / "mini.yaml"))
 DEFAULT_OUTPUT = global_config_dir / "last_mini_run.traj.json"
