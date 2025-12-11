@@ -52,7 +52,7 @@ dependencies = [
 [project.optional-dependencies]
 full = [
     "mini-swe-agent[dev]",
-    "live-swe-agent",
+    "live-swe-agent @ git+https://github.com/OpenAutoCoder/live-swe-agent.git",
     "swe-rex>=1.4.0",
 ]
 
