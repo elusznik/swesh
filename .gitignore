@@ -188,3 +188,6 @@ copilot.md
 gemini-cli.md
 gemini.md
 .DS_Store
+.serena/.gitignore
+.gitignore
+.serena/project.yml
