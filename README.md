@@ -2,12 +2,19 @@
 <a href="https://mini-swe-agent.com/latest/"><img src="https://raw.githubusercontent.com/live-swe-agent/live-swe-agent.github.io/refs/heads/main/img/livesweagent.png" alt="mini-swe-agent banner" style="height: 8em"/></a>
 </div>
 
-<h1 align="center">swesh | mini/live-swe-agent shell</h1>
+<h1 align="center">swesh | SWE-agent shell</h1>
 
 <p align="center">
+    <b>Live-SWE-agent</b><br>
     <a href="https://live-swe-agent.github.io/"><img src="https://img.shields.io/badge/%F0%9F%8F%86-leaderboard-8A2BE2?style=for-the-badge"></a>
     <a href="https://arxiv.org/abs/2511.13646"><img src="https://img.shields.io/badge/📃-Arxiv-a8324c.svg?style=for-the-badge"></a>
     <a href="https://huggingface.co/livesweagent"><img src="https://img.shields.io/badge/🤗-HuggingFace-eba134.svg?style=for-the-badge"></a>
+</p>
+<p align="center">
+    <b>mini-swe-agent</b><br>
+    <a href="https://mini-swe-agent.com/latest/"><img src="https://img.shields.io/badge/Docs-green?style=for-the-badge&logo=materialformkdocs&logoColor=white"></a>
+    <a href="https://join.slack.com/t/swe-bench/shared_invite/zt-36pj9bu5s-o3_yXPZbaH2wVnxnss1EkQ"><img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"></a>
+    <a href="https://pypi.org/project/mini-swe-agent/"><img src="https://img.shields.io/pypi/v/mini-swe-agent?style=for-the-badge&logo=python&logoColor=white&labelColor=black&color=deeppink"></a>
 </p>
 
 <p align="center">
@@ -57,23 +64,14 @@ It combines the **"100 lines of Python"** philosophy of `mini` with the **self-e
 
 ### 1. Installation
 
-**Option 1: UV / Pipx (Quick Run)**
-
-```bash
-# Run instantly without installing
-uvx swesh [-v]
-# or
-pipx run swesh [-v]
-```
-
-**Option 2: Local Install (Recommended)**
+**Option 1: Local Install (Recommended)**
 
 ```bash
 # Install with uv (fastest)
 uv pip install -e ".[full]" swebench
 ```
 
-**Option 3: Developer Setup**
+**Option 2: Developer Setup**
 
 ```bash
 git clone https://github.com/elusznik/swesh.git
