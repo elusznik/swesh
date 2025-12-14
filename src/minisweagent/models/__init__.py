@@ -80,7 +80,7 @@ def get_model_name(input_model_name: str | None = None, config: dict | None = No
 
 _MODEL_CLASS_MAPPING = {
     "anthropic": "minisweagent.models.anthropic.AnthropicModel",
-    "litellm": "minisweagent.models.litellm_model.LitellmModel",
+    "litellm": "minisweagent.models.robust_litellm_model.RobustLitellmModel",
     "litellm_response": "minisweagent.models.litellm_response_api_model.LitellmResponseAPIModel",
     "openrouter": "minisweagent.models.openrouter_model.OpenRouterModel",
     "portkey": "minisweagent.models.portkey_model.PortkeyModel",
@@ -108,7 +108,7 @@ def get_model_class(model_name: str, model_class: str = "") -> type:
             msg = f"Unknown model class: {model_class} (resolved to {full_path}, available: {_MODEL_CLASS_MAPPING})"
             raise ValueError(msg)
 
-    # Default to LitellmModel
-    from minisweagent.models.litellm_model import LitellmModel
+    # Default to RobustLitellmModel (handles message cleaning and robust cost)
+    from minisweagent.models.robust_litellm_model import RobustLitellmModel
 
-    return LitellmModel
+    return RobustLitellmModel
