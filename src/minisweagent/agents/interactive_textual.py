@@ -276,7 +276,7 @@ class TextualAgent(App):
 
         self._vscroll = VerticalScroll()
 
-    def run(self, task: str, **kwargs) -> tuple[str, str]:
+    def run(self, task: str, **kwargs) -> tuple[str, str]:  # type: ignore[override]
         threading.Thread(target=lambda: self.agent.run(task, **kwargs), daemon=True).start()
         super().run()
         return self.exit_status, self.result

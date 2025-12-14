@@ -37,7 +37,7 @@ class PortkeyResponseAPIModel(PortkeyModel):
     )
     def _query(self, messages: list[dict[str, str]], **kwargs):
         input_messages = messages if self._previous_response_id is None else messages[-1:]
-        resp = self.client.responses.create(
+        resp = self.client.responses.create(  # type: ignore[call-overload]
             model=self.config.model_name,
             input=input_messages,
             previous_response_id=self._previous_response_id,

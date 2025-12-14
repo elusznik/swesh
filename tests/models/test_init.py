@@ -85,7 +85,7 @@ class TestGetModel:
         with patch("minisweagent.models.get_model_class") as mock_get_class:
             mock_get_class.return_value = lambda **kwargs: DeterministicModel(outputs=["test"], model_name="test")
             get_model("test-model", original_config)
-            assert original_config["model_kwargs"]["api_key"] == "original"
+            assert original_config["model_kwargs"]["api_key"] == "original"  # type: ignore[index]
             assert "model_name" not in original_config
 
     def test_integration_with_compatible_model(self):

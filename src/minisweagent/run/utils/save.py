@@ -58,10 +58,10 @@ def save_traj(
         "trajectory_format": "mini-swe-agent-1",
     } | kwargs
     if agent is not None:
-        data["info"]["model_stats"]["instance_cost"] = agent.model.cost
-        data["info"]["model_stats"]["api_calls"] = agent.model.n_calls
+        data["info"]["model_stats"]["instance_cost"] = agent.model.cost  # type: ignore[index]
+        data["info"]["model_stats"]["api_calls"] = agent.model.n_calls  # type: ignore[index]
         data["messages"] = agent.messages
-        data["info"]["config"] = {
+        data["info"]["config"] = {  # type: ignore[index]
             "agent": _asdict(agent.config),
             "model": _asdict(agent.model.config),
             "environment": _asdict(agent.env.config),
@@ -70,7 +70,7 @@ def save_traj(
             "environment_type": _get_class_name_with_module(agent.env),
         }
     if extra_info:
-        data["info"].update(extra_info)
+        data["info"].update(extra_info)  # type: ignore[union-attr]
 
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2))

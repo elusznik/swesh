@@ -220,7 +220,7 @@ def test_docker_environment_custom_container_timeout(executable):
         time.sleep(5)
         with pytest.raises((subprocess.CalledProcessError, subprocess.TimeoutExpired)):
             # This command should fail because the container has stopped
-            subprocess.run(
+            subprocess.run(  # type: ignore[call-overload]
                 [executable, "exec", env.container_id, "echo", "still running"],
                 check=True,
                 capture_output=True,

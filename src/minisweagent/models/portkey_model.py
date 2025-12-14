@@ -42,7 +42,7 @@ class PortkeyModelConfig:
     """
     set_cache_control: Literal["default_end"] | None = None
     """Set explicit cache control markers, for example for Anthropic models"""
-    cost_tracking: Literal["default", "ignore_errors"] = os.getenv("MSWEA_COST_TRACKING", "default")
+    cost_tracking: Literal["default", "ignore_errors"] = os.getenv("MSWEA_COST_TRACKING", "default")  # type: ignore[assignment]
     """Cost tracking mode for this model. Can be "default" or "ignore_errors" (ignore errors/missing cost info)"""
 
 
@@ -71,7 +71,7 @@ class PortkeyModel:
         if virtual_key:
             client_kwargs["virtual_key"] = virtual_key
 
-        self.client = Portkey(**client_kwargs)
+        self.client = Portkey(**client_kwargs)  # type: ignore[arg-type]
 
     @retry(
         stop=stop_after_attempt(int(os.getenv("MSWEA_MODEL_RETRY_STOP_AFTER_ATTEMPT", "10"))),
