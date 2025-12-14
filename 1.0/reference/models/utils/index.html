@@ -2461,7 +2461,7 @@
 
 <span class="n">_MODEL_CLASS_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"anthropic"</span><span class="p">:</span> <span class="s2">"minisweagent.models.anthropic.AnthropicModel"</span><span class="p">,</span>
-    <span class="s2">"litellm"</span><span class="p">:</span> <span class="s2">"minisweagent.models.litellm_model.LitellmModel"</span><span class="p">,</span>
+    <span class="s2">"litellm"</span><span class="p">:</span> <span class="s2">"minisweagent.models.robust_litellm_model.RobustLitellmModel"</span><span class="p">,</span>
     <span class="s2">"litellm_response"</span><span class="p">:</span> <span class="s2">"minisweagent.models.litellm_response_api_model.LitellmResponseAPIModel"</span><span class="p">,</span>
     <span class="s2">"openrouter"</span><span class="p">:</span> <span class="s2">"minisweagent.models.openrouter_model.OpenRouterModel"</span><span class="p">,</span>
     <span class="s2">"portkey"</span><span class="p">:</span> <span class="s2">"minisweagent.models.portkey_model.PortkeyModel"</span><span class="p">,</span>
@@ -2489,10 +2489,10 @@
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Unknown model class: </span><span class="si">{</span><span class="n">model_class</span><span class="si">}</span><span class="s2"> (resolved to </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2">, available: </span><span class="si">{</span><span class="n">_MODEL_CLASS_MAPPING</span><span class="si">}</span><span class="s2">)"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="c1"># Default to LitellmModel</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">minisweagent.models.litellm_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LitellmModel</span>
+    <span class="c1"># Default to RobustLitellmModel (handles message cleaning and robust cost)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">minisweagent.models.robust_litellm_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobustLitellmModel</span>
 
-    <span class="k">return</span> <span class="n">LitellmModel</span>
+    <span class="k">return</span> <span class="n">RobustLitellmModel</span>
 </code></pre></div>
 </details>
 </div>
@@ -2678,10 +2678,10 @@ Otherwise, the model_name is used to select the best model class.</p>
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Unknown model class: </span><span class="si">{</span><span class="n">model_class</span><span class="si">}</span><span class="s2"> (resolved to </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2">, available: </span><span class="si">{</span><span class="n">_MODEL_CLASS_MAPPING</span><span class="si">}</span><span class="s2">)"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="c1"># Default to LitellmModel</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">minisweagent.models.litellm_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LitellmModel</span>
+    <span class="c1"># Default to RobustLitellmModel (handles message cleaning and robust cost)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">minisweagent.models.robust_litellm_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobustLitellmModel</span>
 
-    <span class="k">return</span> <span class="n">LitellmModel</span>
+    <span class="k">return</span> <span class="n">RobustLitellmModel</span>
 </code></pre></div></td></tr></tbody></table></div>
             </details>
     </div>
