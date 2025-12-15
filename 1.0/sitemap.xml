@@ -13,6 +13,10 @@
          <lastmod>2025-12-15</lastmod>
     </url>
     <url>
+         <loc>https://mini-swe-agent.com/latest/bubblewrap_security/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
          <loc>https://mini-swe-agent.com/latest/contributing/</loc>
          <lastmod>2025-12-15</lastmod>
     </url>
@@ -26,6 +30,10 @@
     </url>
     <url>
          <loc>https://mini-swe-agent.com/latest/sandbox_design/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://mini-swe-agent.com/latest/security/</loc>
          <lastmod>2025-12-15</lastmod>
     </url>
     <url>
@@ -46,6 +54,10 @@
     </url>
     <url>
          <loc>https://mini-swe-agent.com/latest/advanced/global_configuration/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://mini-swe-agent.com/latest/advanced/textual_opencode_ui/</loc>
          <lastmod>2025-12-15</lastmod>
     </url>
     <url>
@@ -190,6 +202,10 @@
     </url>
     <url>
          <loc>https://mini-swe-agent.com/latest/usage/swebench/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://mini-swe-agent.com/latest/usage/swesh/</loc>
          <lastmod>2025-12-15</lastmod>
     </url>
 </urlset>
