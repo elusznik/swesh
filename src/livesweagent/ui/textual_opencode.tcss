@@ -1,0 +1,83 @@
+Screen {
+  layout: vertical;
+}
+
+#main {
+  height: 1fr;
+}
+
+#transcript {
+  height: 1fr;
+  padding: 1 2;
+}
+
+#bottom {
+  dock: bottom;
+  height: auto;
+  padding: 0 2 1 2;
+  background: $panel;
+}
+
+#status {
+  height: 1;
+  color: $text-muted;
+}
+
+#input-bar {
+  height: auto;
+}
+
+#input-prompt {
+  height: auto;
+  text-style: bold;
+}
+
+#input-hint {
+  height: 1;
+  color: $text-muted;
+}
+
+#input-multiline {
+  height: auto;
+  min-height: 3;
+  max-height: 16;
+}
+
+.row {
+  width: 100%;
+  height: auto;
+  margin: 0 0 1 0;
+}
+
+.row.user_input {
+  color: $success;
+}
+
+.row.assistant_output {
+  color: $text;
+}
+
+.row.assistant_reasoning {
+  color: $text-muted;
+  text-style: italic;
+}
+
+.row.tool_call {
+  background: $surface;
+  border-left: tall $accent;
+  padding: 0 1;
+}
+
+.row.tool_output {
+  background: $surface;
+  border-left: tall $primary;
+  padding: 0 1;
+}
+
+.row.system {
+  color: $warning;
+}
+
+Header.running {
+  background: $error;
+}

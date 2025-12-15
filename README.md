@@ -39,6 +39,10 @@ It combines the **"100 lines of Python"** philosophy of `mini` with the **self-e
 3.  **Interactive Shell**: Enhanced generic agent shell that supports `!` commands for direct shell escape interactions.
 4.  **Batch & Interactive**: Supports both single-task interactive runs and full `SWE-bench` evaluations out of the box.
 
+> ⚠️ **Security Warning**: swesh executes bash commands with your user privileges.
+> Always review commands before approving in `confirm` mode.
+> For untrusted tasks, use `--sandbox` mode. See [docs/security.md](docs/security.md) for details.
+
 ---
 
 ## ✨ Features
@@ -60,6 +64,8 @@ It combines the **"100 lines of Python"** philosophy of `mini` with the **self-e
 
 ## 🚀 Setup
 
+> **Python version**: Prefer Python **3.10–3.13**. Avoid Python **3.14** for now (some transitive deps like `grpcio` may not have wheels and can fail to build).
+
 **swesh** offers flexible installation options similar to `mini-swe-agent`.
 
 ### 1. Installation
@@ -68,7 +74,7 @@ It combines the **"100 lines of Python"** philosophy of `mini` with the **self-e
 
 ```bash
 # Install with uv (fastest)
-uv pip install -e ".[full]" swebench
+uv sync
 ```
 
 **Option 2: Developer Setup**
@@ -77,7 +83,7 @@ uv pip install -e ".[full]" swebench
 git clone https://github.com/elusznik/swesh.git
 cd swesh
 ./sync_remotes.sh   # Adds upstream remotes (live-swe-agent, mini-swe-agent)
-pip install -e .
+uv sync
 ```
 
 > **Note**: swesh tracks two upstream projects. Run `./sync_remotes.sh` periodically to pull latest changes from both.
@@ -119,7 +125,7 @@ See [Global Configuration](https://mini-swe-agent.com/latest/advanced/global_con
 Run `swesh` (or `mini`) to start an interactive session.
 
 ```bash
-mini --model mistral/codestral-latest --task "Fix the bug in src/utils.py"
+swesh --model mistral/codestral-latest --task "Fix the bug in src/utils.py"
 ```
 
 **Interactive Commands:**
@@ -128,11 +134,15 @@ mini --model mistral/codestral-latest --task "Fix the bug in src/utils.py"
 
 ### 2. Visual Mode
 
-Run with `-v` to use the Textual UI (inherited from `mini-swe-agent`):
+`swesh` defaults to an opencode-style Textual TUI (continuous transcript + bottom input bar).
+
+To use the legacy pager-style Textual UI (the same as `mini -v`), run:
 
 ```bash
-mini -v
+swesh -v
 ```
+
+To override the opencode UI styling, set `MSWEA_OPENCODE_STYLE_PATH` to a `.tcss` file.
 
 ### 3. Live-SWE-agent Self-Evolution
 

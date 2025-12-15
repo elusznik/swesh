@@ -85,7 +85,8 @@ mini = "minisweagent.run.mini:app"
 mini-swe-agent = "minisweagent.run.mini:app"
 mini-extra = "minisweagent.run.mini_extra:main"
 mini-e= "minisweagent.run.mini_extra:main"
-swesh = "minisweagent.run.mini:app"
+mini-opencode = "livesweagent.run_opencode_ui:main"
+swesh = "livesweagent.run_swesh:app"
 swesh-extra = "minisweagent.run.mini_extra:main"
 
 [tool.setuptools]
@@ -96,10 +97,11 @@ version = {attr = "minisweagent.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["minisweagent*"]
+include = ["minisweagent*", "livesweagent*"]
 
 [tool.setuptools.package-data]
 minisweagent = ["config/**/*"]
+livesweagent = ["ui/*.tcss"]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

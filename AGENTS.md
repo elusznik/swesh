@@ -21,6 +21,10 @@ You **MUST** use **`uv`** for all Python environment and package management task
 - **Installing Dependencies**: Use `uv add <package>` to add dependencies.
 - **Syncing**: Use `uv sync` to ensure the environment matches the lockfile.
 
+### Python Version Compatibility
+- Prefer Python **3.103.13** for development and CI parity.
+- Avoid Python **3.14** for now: some transitive dependencies (notably `grpcio`) may not have wheels and may fail to build from source.
+
 ### 2. Operational Constraints
 - **Preserve Existing Configurations**: Do not modify the original `mini-swe-agent` or `live-swe-agent` logic unless specifically refactoring for the interactive CLI goal.
 - **Maintain Upstream Mergeability**: This repo tracks two upstream remotes (`live-swe-agent` and `mini-swe-agent`). To keep merges clean:
