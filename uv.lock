@@ -981,25 +981,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mini-swe-agent"
-version = "1.17.3"
-source = { git = "https://github.com/SWE-agent/mini-swe-agent.git#3c2cd4a9cf24360ef0187ac68bb29041a78975f7" }
-dependencies = [
-    { name = "jinja2" },
-    { name = "litellm" },
-    { name = "openai" },
-    { name = "platformdirs" },
-    { name = "prompt-toolkit" },
-    { name = "python-dotenv" },
-    { name = "pyyaml" },
-    { name = "requests" },
-    { name = "rich" },
-    { name = "tenacity" },
-    { name = "textual" },
-    { name = "typer" },
-]
-
-[[package]]
 name = "mkdocs"
 version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2038,7 +2019,6 @@ dependencies = [
     { name = "grpcio" },
     { name = "jinja2" },
     { name = "litellm" },
-    { name = "mini-swe-agent" },
     { name = "openai" },
     { name = "platformdirs" },
     { name = "prompt-toolkit" },
@@ -2083,7 +2063,6 @@ requires-dist = [
     { name = "jinja2" },
     { name = "litellm", specifier = ">=1.75.5" },
     { name = "mike", marker = "extra == 'dev'" },
-    { name = "mini-swe-agent", git = "https://github.com/SWE-agent/mini-swe-agent.git" },
     { name = "mkdocs-glightbox", marker = "extra == 'dev'" },
     { name = "mkdocs-include-markdown-plugin", marker = "extra == 'dev'" },
     { name = "mkdocs-material", marker = "extra == 'dev'" },

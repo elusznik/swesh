@@ -13,10 +13,9 @@ def test_local_end_to_end(local_test_data):
 
     with (
         patch("minisweagent.run.mini.configure_if_first_time"),
-        patch("minisweagent.models.litellm_model.LitellmModel") as mock_model_class,
+        patch("minisweagent.run.mini.get_model", return_value=DeterministicModel(outputs=model_responses)),
         patch("minisweagent.agents.interactive.prompt_session.prompt", return_value=""),  # No new task
     ):
-        mock_model_class.return_value = DeterministicModel(outputs=model_responses)
         agent = main(
             model_name="tardis",
             config_spec=DEFAULT_CONFIG,

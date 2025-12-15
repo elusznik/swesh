@@ -50,7 +50,6 @@ dependencies = [
     "datasets",
     "swebench",
     "grpcio==1.76.0",
-    "mini-swe-agent @ git+https://github.com/SWE-agent/mini-swe-agent.git",
 ]
 
 [project.optional-dependencies]
@@ -95,13 +94,14 @@ swesh-extra = "minisweagent.run.mini_extra:main"
 include-package-data = true
 
 [tool.setuptools.dynamic]
-version = {attr = "livesweagent.__version__"}
+version = {attr = "minisweagent.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["livesweagent*"]
+include = ["minisweagent*", "livesweagent*"]
 
 [tool.setuptools.package-data]
+minisweagent = ["config/**/*"]
 livesweagent = ["ui/*.tcss"]
 
 [tool.ruff]

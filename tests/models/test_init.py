@@ -46,29 +46,27 @@ class TestGetModelName:
 
 
 class TestGetModelClass:
-    def test_anthropic_model_selection(self):
-        """Test that anthropic-related model names return LitellmModel by default."""
-        from minisweagent.models.litellm_model import LitellmModel
+    def test_default_model_class_is_robust_litellm(self):
+        """Fork default is RobustLitellmModel for all model names."""
+        from minisweagent.models.robust_litellm_model import RobustLitellmModel
 
-        for name in ["anthropic", "sonnet", "opus", "claude-sonnet", "claude-opus"]:
-            assert get_model_class(name) == LitellmModel
-
-    def test_litellm_model_fallback(self):
-        """Test that non-anthropic model names return LitellmModel."""
-        from minisweagent.models.litellm_model import LitellmModel
-
-        for name in ["gpt-4", "gpt-3.5-turbo", "llama2", "random-model"]:
-            assert get_model_class(name) == LitellmModel
-
-    def test_partial_matches(self):
-        """Test that partial string matches work correctly."""
-        from minisweagent.models.litellm_model import LitellmModel
-
-        assert get_model_class("my-anthropic-model") == LitellmModel
-        assert get_model_class("sonnet-latest") == LitellmModel
-        assert get_model_class("opus-v2") == LitellmModel
-        assert get_model_class("gpt-anthropic-style") == LitellmModel
-        assert get_model_class("totally-different") == LitellmModel
+        for name in [
+            "anthropic",
+            "sonnet",
+            "opus",
+            "claude-sonnet",
+            "claude-opus",
+            "gpt-4",
+            "gpt-3.5-turbo",
+            "llama2",
+            "random-model",
+            "my-anthropic-model",
+            "sonnet-latest",
+            "opus-v2",
+            "gpt-anthropic-style",
+            "totally-different",
+        ]:
+            assert get_model_class(name) == RobustLitellmModel
 
     def test_litellm_response_model_selection(self):
         """Test that litellm_response model class can be selected."""
