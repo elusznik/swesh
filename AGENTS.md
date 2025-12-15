@@ -23,7 +23,15 @@ You **MUST** use **`uv`** for all Python environment and package management task
 
 ### 2. Operational Constraints
 - **Preserve Existing Configurations**: Do not modify the original `mini-swe-agent` or `live-swe-agent` logic unless specifically refactoring for the interactive CLI goal.
+- **Maintain Upstream Mergeability**: This repo tracks two upstream remotes (`live-swe-agent` and `mini-swe-agent`). To keep merges clean:
+  - **Prefer new files** over modifying existing upstream files (both config AND code)
+  - **Use separate config files** for swesh-specific features (e.g., `swesh_*.yaml`)
+  - **Extend, don't modify** — subclass or wrap rather than edit in place
+  - Example: We added `RobustLitellmModel` instead of modifying `litellm_model.py`
+  - Example: New environments go in `environments/` as new files, not edits to `docker.py`
+  - Run `./sync_remotes.sh` periodically to pull upstream changes
 - **Tooling**: When creating new tools or scripts, ensure they are compatible with the `uv` environment.
+
 
 ## Agent Architectures & Inspirations
 This project draws inspiration from and aims to bridge the gap between several state-of-the-art agent architectures:

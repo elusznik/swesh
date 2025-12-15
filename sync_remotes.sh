@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Ensure upstream remotes are configured
+add_remote_if_missing() {
+    REMOTE=$1
+    URL=$2
+    if ! git remote | grep -q "^${REMOTE}$"; then
+        echo "Adding remote '$REMOTE' -> $URL"
+        git remote add "$REMOTE" "$URL"
+    fi
+}
+
+add_remote_if_missing live-swe-agent https://github.com/OpenAutoCoder/live-swe-agent.git
+add_remote_if_missing mini-swe-agent https://github.com/SWE-agent/mini-swe-agent.git
+
 # 1. Fetch from all remotes (live-swe-agent, mini-swe-agent, origin)
 echo "Fetching latest changes from all remotes..."
 git fetch --all

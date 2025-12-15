@@ -75,8 +75,12 @@ uv pip install -e ".[full]" swebench
 
 ```bash
 git clone https://github.com/elusznik/swesh.git
-cd swesh && pip install -e .
+cd swesh
+./sync_remotes.sh   # Adds upstream remotes (live-swe-agent, mini-swe-agent)
+pip install -e .
 ```
+
+> **Note**: swesh tracks two upstream projects. Run `./sync_remotes.sh` periodically to pull latest changes from both.
 
 ### 2. Configure Podman (Recommended)
 
