@@ -64,7 +64,7 @@ It combines the **"100 lines of Python"** philosophy of `mini` with the **self-e
 
 ## 🚀 Setup
 
-> **Python version**: Prefer Python **3.10–3.13**. Avoid Python **3.14** for now (some transitive deps like `grpcio` may not have wheels and can fail to build).
+> **Python version**: Requires Python **3.14** (this repo currently targets 3.14-only; other versions are unsupported).
 
 **swesh** offers flexible installation options similar to `mini-swe-agent`.
 

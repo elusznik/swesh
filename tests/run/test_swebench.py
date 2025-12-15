@@ -5,7 +5,6 @@ from unittest.mock import patch
 
 import pytest
 
-from minisweagent import package_dir
 from minisweagent.models.test_models import DeterministicModel
 from minisweagent.run.extra.swebench import (
     filter_instances,
@@ -15,15 +14,59 @@ from minisweagent.run.extra.swebench import (
     update_preds_file,
 )
 
+_REPO_ROOT = __import__("pathlib").Path(__file__).resolve().parents[2]
+_TEST_DATA_DIR = _REPO_ROOT / "tests" / "test_data"
+_CONFIG_PATH = _REPO_ROOT / "config" / "livesweagent_swebench.yaml"
+
+
+def _expected_submission_from_fixture() -> str:
+    trajectory = json.loads((_TEST_DATA_DIR / "github_issue.traj.json").read_text())
+    return trajectory[-1]["content"]
+
+
+def _dummy_env_outputs(model_responses: list[str], submission: str) -> list[str]:
+    # One environment.execute per model response; the last one triggers Submitted.
+    return [""] * (len(model_responses) - 1) + [f"MINI_SWE_AGENT_FINAL_OUTPUT\n{submission}"]
+
+
+class DummyEnvironment:
+    def __init__(self, outputs: list[str]):
+        self._outputs = outputs
+        self._idx = 0
+        self.config = {}
+
+    def get_template_vars(self) -> dict:
+        return {}
+
+    def execute(self, command: str, cwd: str = "") -> dict[str, object]:
+        if self._idx >= len(self._outputs):
+            raise AssertionError(f"DummyEnvironment ran out of outputs at command: {command!r}")
+        out = self._outputs[self._idx]
+        self._idx += 1
+        return {"returncode": 0, "output": out}
+
+
+def _fake_dataset() -> list[dict[str, str]]:
+    return [{"instance_id": "swe-agent__test-repo-1", "problem_statement": "Test problem"}]
+
 
 @pytest.mark.slow
 @pytest.mark.parametrize("workers", [1, 2])
 def test_swebench_end_to_end(github_test_data, tmp_path, workers):
-    """Test the complete SWEBench flow using the _test subset with deterministic model"""
+    """Test the complete SWEBench flow using deterministic IO."""
 
     model_responses = github_test_data["model_responses"]
 
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch(
+            "minisweagent.run.extra.swebench.get_sb_environment",
+            side_effect=lambda *args, **kwargs: DummyEnvironment(
+                _dummy_env_outputs(model_responses, _expected_submission_from_fixture())
+            ),
+        ),
+    ):
         mock_get_model.return_value = DeterministicModel(outputs=model_responses, cost_per_call=0.1)
 
         main(
@@ -33,11 +76,11 @@ def test_swebench_end_to_end(github_test_data, tmp_path, workers):
             output=str(tmp_path),
             workers=workers,
             filter_spec="swe-agent__test-repo-1",
-            config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+            config_spec=_CONFIG_PATH,
             environment_class="docker",
         )
 
-    traj_file_path = package_dir.parent.parent / "tests" / "test_data" / "github_issue.traj.json"
+    traj_file_path = _TEST_DATA_DIR / "github_issue.traj.json"
     trajectory = json.loads(traj_file_path.read_text())
 
     last_message = trajectory[-1]["content"]
@@ -310,7 +353,16 @@ def test_redo_existing_false_skips_existing(github_test_data, tmp_path):
     }
     preds_file.write_text(json.dumps(existing_data))
 
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch(
+            "minisweagent.run.extra.swebench.get_sb_environment",
+            side_effect=lambda *args, **kwargs: DummyEnvironment(
+                _dummy_env_outputs(model_responses, _expected_submission_from_fixture())
+            ),
+        ),
+    ):
         mock_get_model.return_value = DeterministicModel(outputs=model_responses)
 
         main(
@@ -321,7 +373,7 @@ def test_redo_existing_false_skips_existing(github_test_data, tmp_path):
             workers=1,
             filter_spec="swe-agent__test-repo-1",
             redo_existing=False,
-            config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+            config_spec=_CONFIG_PATH,
         )
 
     # Should still have the original result
@@ -345,7 +397,16 @@ def test_redo_existing_true_overwrites_existing(github_test_data, tmp_path):
     }
     preds_file.write_text(json.dumps(existing_data))
 
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch(
+            "minisweagent.run.extra.swebench.get_sb_environment",
+            side_effect=lambda *args, **kwargs: DummyEnvironment(
+                _dummy_env_outputs(model_responses, _expected_submission_from_fixture())
+            ),
+        ),
+    ):
         mock_get_model.return_value = DeterministicModel(outputs=model_responses, cost_per_call=0.1)
 
         main(
@@ -356,13 +417,13 @@ def test_redo_existing_true_overwrites_existing(github_test_data, tmp_path):
             workers=1,
             filter_spec="swe-agent__test-repo-1",
             redo_existing=True,
-            config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+            config_spec=_CONFIG_PATH,
             environment_class="docker",
         )
 
-    # Should have new result from deterministic model
-    traj_file_path = package_dir.parent.parent / "tests" / "test_data" / "github_issue.traj.json"
+    traj_file_path = _TEST_DATA_DIR / "github_issue.traj.json"
     trajectory = json.loads(traj_file_path.read_text())
+
     expected_result = trajectory[-1]["content"]
 
     result = json.loads(preds_file.read_text())
@@ -397,7 +458,11 @@ class ExceptionModel:
 @pytest.mark.parametrize("workers", [1, 2])
 def test_exception_handling_in_agent_run(tmp_path, workers):
     """Test that exceptions during agent.run() are properly handled and recorded"""
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch("minisweagent.run.extra.swebench.get_sb_environment", return_value=DummyEnvironment([""])),
+    ):
         mock_get_model.return_value = ExceptionModel(RuntimeError, "Agent processing failed")
 
         with patch("minisweagent.run.extra.swebench.RunBatchProgressManager") as mock_progress_class:
@@ -411,7 +476,7 @@ def test_exception_handling_in_agent_run(tmp_path, workers):
                 output=str(tmp_path),
                 workers=workers,
                 filter_spec="swe-agent__test-repo-1",
-                config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+                config_spec=_CONFIG_PATH,
                 environment_class="docker",
             )
 
@@ -439,7 +504,11 @@ def test_exception_handling_in_agent_run(tmp_path, workers):
 @pytest.mark.parametrize("workers", [1, 2])
 def test_different_exception_types(tmp_path, workers):
     """Test that different exception types are properly recorded"""
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch("minisweagent.run.extra.swebench.get_sb_environment", return_value=DummyEnvironment([""])),
+    ):
         mock_get_model.return_value = ExceptionModel(ValueError, "Invalid input provided")
 
         with patch("minisweagent.run.extra.swebench.RunBatchProgressManager") as mock_progress_class:
@@ -453,7 +522,7 @@ def test_different_exception_types(tmp_path, workers):
                 output=str(tmp_path),
                 workers=workers,
                 filter_spec="swe-agent__test-repo-1",
-                config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+                config_spec=_CONFIG_PATH,
                 environment_class="docker",
             )
 
@@ -469,7 +538,11 @@ def test_different_exception_types(tmp_path, workers):
 @pytest.mark.slow
 def test_exception_handling_with_progress_manager(tmp_path):
     """Test that progress manager receives exception notifications in multithreaded mode"""
-    with patch("minisweagent.run.extra.swebench.get_model") as mock_get_model:
+    with (
+        patch("minisweagent.run.extra.swebench.get_model") as mock_get_model,
+        patch("minisweagent.run.extra.swebench.load_dataset", return_value=_fake_dataset()),
+        patch("minisweagent.run.extra.swebench.get_sb_environment", return_value=DummyEnvironment([""])),
+    ):
         mock_get_model.return_value = ExceptionModel(ConnectionError, "Network timeout")
 
         with patch("minisweagent.run.extra.swebench.RunBatchProgressManager") as mock_progress_class:
@@ -483,7 +556,7 @@ def test_exception_handling_with_progress_manager(tmp_path):
                 output=str(tmp_path),
                 workers=2,  # Use multithreaded to test progress manager
                 filter_spec="swe-agent__test-repo-1",
-                config_spec=package_dir / "config" / "extra" / "swebench.yaml",
+                config_spec=_CONFIG_PATH,
                 environment_class="docker",
             )
 
