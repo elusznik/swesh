@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Ensure upstream remotes are configured
 add_remote_if_missing() {
     REMOTE=$1
@@ -13,40 +15,103 @@ add_remote_if_missing() {
 add_remote_if_missing live-swe-agent https://github.com/OpenAutoCoder/live-swe-agent.git
 add_remote_if_missing mini-swe-agent https://github.com/SWE-agent/mini-swe-agent.git
 
-# 1. Fetch from all remotes (live-swe-agent, mini-swe-agent, origin)
+MODE="fetch"
+if [[ "${1:-}" == "--merge" ]]; then
+    MODE="merge"
+elif [[ -n "${1:-}" ]]; then
+    echo "Usage: $0 [--merge]"
+    echo "  (default)   fetch only"
+    echo "  --merge     fetch, then merge upstream branches"
+    exit 2
+fi
+
+# 1) Always fetch upstream branches. This never pushes anywhere.
 echo "Fetching latest changes from all remotes..."
 git fetch --all
 
-# Helper function to merge and handle conflicts
+echo ""
+echo "✅ Fetch complete. Upstream branches are available as:"
+echo "  - live-swe-agent/main"
+echo "  - mini-swe-agent/main"
+
+if [[ "$MODE" == "fetch" ]]; then
+    echo ""
+    echo "(Fetch-only mode) To merge, rerun: ./sync_remotes.sh --merge"
+    exit 0
+fi
+
+# 2) Optional merge sequence
+archive_upstream_readme() {
+    REMOTE=$1
+    BRANCH=$2
+
+    local archive_path
+    case "$REMOTE" in
+        live-swe-agent) archive_path="README-live.md" ;;
+        mini-swe-agent) archive_path="README-mini.md" ;;
+        *) archive_path="README-${REMOTE}.md" ;;
+    esac
+
+    echo "Archiving $REMOTE/$BRANCH:README.md -> $archive_path"
+    git show "$REMOTE/$BRANCH:README.md" > "$archive_path"
+    git add "$archive_path"
+}
+
 merge_remote() {
     REMOTE=$1
     BRANCH=$2
-    
+
     echo ""
     echo ">>> Attempting to merge changes from $REMOTE/$BRANCH..."
-    
-    # Try to merge. If it fails (returns non-zero), we enter the 'else' block.
-    if git merge "$REMOTE/$BRANCH"; then
-        echo "✔ Success: $REMOTE/$BRANCH merged automatically."
-    else
-        echo ""
-        echo "⚠️  CONFLICT DETECTED!"
-        echo "Git has paused the merge so you can resolve the conflicts."
-        echo ""
-        echo "INSTRUCTIONS:"
-        echo "1. Open the conflicting files (e.g. pyproject.toml)."
-        echo "2. Fix the conflicts manually."
-        echo "3. Run 'git add <file>'."
-        echo "4. Run 'git commit' to finalize this merge."
-        echo "5. Run this script AGAIN to proceed to the next remote."
-        exit 1
+
+    if git merge --no-edit "$REMOTE/$BRANCH"; then
+        echo "✔ Success: $REMOTE/$BRANCH merged."
+        return 0
     fi
+
+    echo ""
+    echo "⚠️  CONFLICT DETECTED during merge of $REMOTE/$BRANCH"
+    echo ""
+
+    local conflicts
+    conflicts=$(git diff --name-only --diff-filter=U || true)
+
+    # Special-case: README conflicts are expected because swesh keeps its own
+    # top-level README. We archive upstream README into README-live.md /
+    # README-mini.md and keep swesh README.md.
+    local allowlist
+    allowlist="README.md"
+
+    local can_auto=1
+    for f in $conflicts; do
+        if ! echo "$allowlist" | tr ' ' '\n' | grep -qx "$f"; then
+            can_auto=0
+            break
+        fi
+    done
+
+    if [[ $can_auto -eq 1 ]]; then
+        archive_upstream_readme "$REMOTE" "$BRANCH"
+        git checkout --ours -- README.md
+        git add README.md
+        git commit --no-edit
+        echo "✔ Success: $REMOTE/$BRANCH merged (upstream README archived)."
+        return 0
+    fi
+
+    echo "Conflicts require manual resolution:"
+    echo "$conflicts"
+    echo ""
+    echo "INSTRUCTIONS:"
+    echo "1. Resolve files above."
+    echo "2. Run 'git add <file>'."
+    echo "3. Run 'git commit' to finalize this merge."
+    echo "4. Rerun: ./sync_remotes.sh --merge"
+    exit 1
 }
 
-# 2. Merge sequence
-# Adjust 'main' if the remote branch is named 'master' or something else
 merge_remote live-swe-agent main
 merge_remote mini-swe-agent main
 
 echo ""
-echo "🎉 All remotes are up to date and merged!"
+echo "🎉 All upstream branches fetched and merged."
