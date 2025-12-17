@@ -33,7 +33,15 @@ class RobustLitellmModel(LitellmModel):
         # Call the parent's internal _query method with cleaned messages
         response = self._query(cleaned_messages, **kwargs)
 
-        text = coerce_responses_text(response)
+        # Match stock LitellmModel behavior first (chat-completions shape),
+        # then fall back to Responses API extraction.
+        text = ""
+        try:
+            text = response.choices[0].message.content or ""  # type: ignore[attr-defined]
+        except Exception:
+            text = ""
+        if not text:
+            text = coerce_responses_text(response)
 
         # Robust cost calculation
         try:
@@ -53,10 +61,13 @@ class RobustLitellmModel(LitellmModel):
         self.cost += cost
         GLOBAL_MODEL_STATS.add(cost)
 
+        model_dump = getattr(response, "model_dump", None)
+        dumped_response = model_dump() if callable(model_dump) else {}
+
         return {
             "content": text,
             "extra": {
-                "response": response.model_dump() if hasattr(response, "model_dump") else {},
+                "response": dumped_response,
                 "cost": cost,
             },
         }
