@@ -74,9 +74,9 @@
         For development or if you want to customize the agent:
 
         ```bash
-        git clone https://github.com/SWE-agent/mini-swe-agent.git
-        cd mini-swe-agent
-        pip install -e .
+        git clone https://github.com/elusznik/swesh.git
+        cd swesh
+        uv sync --extra dev
         ```
 
         Then run:
@@ -87,18 +87,18 @@
         mini-extra  # extra utilities
         ```
 
-        Or pick a [run script](https://github.com/SWE-agent/mini-swe-agent/tree/main/src/minisweagent/run):
+        Or pick a [run script](https://github.com/elusznik/swesh/tree/main/src/minisweagent/run):
 
         ```bash
-        python src/minisweagent/run/hello_world.py
+        uv run python src/minisweagent/run/hello_world.py
         ```
 
         If you are planning to contribute, please also install the dev dependencies
         and `pre-commit` hooks:
 
         ```bash
-        pip install -e '.[dev]'
-        pip install pre-commit && pre-commit install
+        uv sync --extra dev
+        uv run pre-commit install
         ```
 
         To check your installation, you can run `pytest -n auto` in the root folder.
@@ -106,11 +106,11 @@
 
         Note that there are still some extra dependencies that are not installed by default
         (basically anything that is in an `.../extra/...` folder).
-        If you truly want to get the maximal package, you can run `pip install -e '.[full]'`
+        If you truly want to get the maximal package, you can run `uv sync --extra full`
 
 !!! note "Changelog"
 
-    Please see the [github release notes](https://github.com/SWE-agent/mini-swe-agent/releases) for recent changes.
+    Please see the [github release notes](https://github.com/elusznik/swesh/releases) for recent changes.
 
 !!! example "Example Prompts"
 

@@ -6,7 +6,7 @@
     * Compared to [`mini`](mini.md), `mini -v` offers a more advanced UI based on [Textual](https://textual.textualize.io/).
 
 !!! tip "Feedback wanted!"
-    Give feedback on the `mini` and `mini -v` interfaces at [this github issue](https://github.com/swe-agent/mini-swe-agent/issues/161)
+    Give feedback on the `mini` and `mini -v` interfaces in our [issue tracker](https://github.com/elusznik/swesh/issues)
     or in our [Slack channel](https://join.slack.com/t/swe-bench/shared_invite/zt-36pj9bu5s-o3_yXPZbaH2wVnxnss1EkQ).
 
 
@@ -35,7 +35,7 @@ Useful switches:
 
 - `-h`/`--help`: Show help
 - `-t`/`--task`: Specify a task to run (else you will be prompted)
-- `-c`/`--config`: Specify a config file to use, else we will use [`mini.yaml`](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml) or the config `MSWEA_MINI_CONFIG_PATH` environment variable (see [global configuration](../advanced/global_configuration.md))
+- `-c`/`--config`: Specify a config file to use, else we will use [`mini.yaml`](https://github.com/elusznik/swesh/blob/main/src/minisweagent/config/mini.yaml) or the config `MSWEA_MINI_CONFIG_PATH` environment variable (see [global configuration](../advanced/global_configuration.md))
   It's enough to specify the name of the config file, e.g., `-c mini.yaml` (see [global configuration](../advanced/global_configuration.md) for how it is resolved).
 - `-m`/`--model`: Specify a model to use, else we will use the model `MSWEA_MODEL_NAME` environment variable (see [global configuration](../advanced/global_configuration.md))
 - `-y`/`--yolo`: Start in `yolo` mode (see below)
@@ -85,7 +85,7 @@ Hold down the `Alt`/`Option` key and use the mouse to select the text.
 
 ??? note "Default config"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/config/mini.yaml)
 
     ```yaml
     --8<-- "src/minisweagent/config/mini.yaml"
@@ -93,7 +93,7 @@ Hold down the `Alt`/`Option` key and use the mouse to select the text.
 
 ??? note "Run script"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/run/mini.py)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/run/mini.py)
     - [API reference](../reference/run/mini.md)
 
     ```python
@@ -102,7 +102,7 @@ Hold down the `Alt`/`Option` key and use the mouse to select the text.
 
 ??? note "Agent class"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/agents/interactive.py)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/agents/interactive.py)
     - [API reference](../reference/agents/interactive.md)
 
     ```python

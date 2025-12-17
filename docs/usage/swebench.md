@@ -34,7 +34,7 @@
         ```bash
         mini-extra swebench --help
         # or
-        python src/minisweagent/run/extra/swebench.py --help
+        uv run python src/minisweagent/run/extra/swebench.py --help
         # Example:
         mini-extra swebench \
             --model anthropic/claude-sonnet-4-5-20250929 \
@@ -70,7 +70,7 @@
         ```bash
         mini-extra swebench-single --help
         # or
-        python src/minisweagent/run/extra/swebench_single.py --help
+        uv run python src/minisweagent/run/extra/swebench_single.py --help
         # Example:
         mini-extra swebench-single \
             --subset verified \
@@ -200,7 +200,7 @@ See [this guide](../advanced/environments.md) for more details.
 
 ??? note "Default config"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/config/extra/swebench.yaml)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/config/extra/swebench.yaml)
 
     ```yaml
     --8<-- "src/minisweagent/config/extra/swebench.yaml"
@@ -208,7 +208,7 @@ See [this guide](../advanced/environments.md) for more details.
 
 ??? note "`swebench.py` run script"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/run/extra/swebench.py)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/run/extra/swebench.py)
     - [API reference](../reference/run/swebench.md)
 
     ```python
@@ -217,7 +217,7 @@ See [this guide](../advanced/environments.md) for more details.
 
 ??? note "`swebench_single.py` run script"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/run/extra/swebench_single.py)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/run/extra/swebench_single.py)
     - [API reference](../reference/run/swebench_single.md)
 
     ```python

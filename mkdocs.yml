@@ -1,5 +1,5 @@
-site_name: mini-SWE-agent documentation
-site_url: https://mini-swe-agent.com
+site_name: swesh documentation (mini-SWE-agent + Live-SWE-agent)
+site_url: https://elusznik.github.io/swesh
 theme:
   name: material
   icon:
@@ -51,14 +51,12 @@ markdown_extensions:
   - md_in_html
   - pymdownx.snippets:
       check_paths: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 nav:
   - Getting Started:
     - "Overview": index.md
     - "Quick start": quickstart.md
     - "Command line usage":
+      - "<code>swesh</code>": usage/swesh.md
       - "<code>mini</code>": usage/mini.md
       - "<code>mini -v</code>": usage/mini_v.md
       - "SWE-bench": usage/swebench.md
@@ -140,8 +138,8 @@ plugins:
               - "!^_"
               - "!^model_config"
               - "!^model_post_init"
-repo_url: https://github.com/SWE-agent/mini-SWE-agent
-repo_name: SWE-agent/mini-SWE-agent
+repo_url: https://github.com/elusznik/swesh
+repo_name: elusznik/swesh
 edit_uri: edit/main/docs/
 extra_javascript:
   - assets/js/sh-annotation.js

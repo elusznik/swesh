@@ -7,9 +7,9 @@ This guide covers how to set up and run SWE-bench evaluations using **live-swe-a
 ## 1. Prerequisites & Installation
 
 ### Python Environment
-Install `mini-swe-agent` with full dependencies and `swebench`:
+Install this repo (swesh) with full dependencies:
 ```bash
-uv pip install -e ".[full]" swebench
+uv sync --extra full
 ```
 
 ### Container Runtime Setup

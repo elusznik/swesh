@@ -48,7 +48,7 @@ The inspector is implemented with [textual](https://textual.textualize.io/).
 
 ??? note "Implementation"
 
-    - [Read on GitHub](https://github.com/swe-agent/mini-swe-agent/blob/main/src/minisweagent/run/extra/inspector.py)
+    - [Read on GitHub](https://github.com/elusznik/swesh/blob/main/src/minisweagent/run/extra/inspector.py)
 
     ```python linenums="1"
     --8<-- "src/minisweagent/run/extra/inspector.py"
