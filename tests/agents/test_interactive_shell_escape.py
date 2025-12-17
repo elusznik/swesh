@@ -1,6 +1,14 @@
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+import yaml
+
 from minisweagent.agents.interactive import InteractiveAgent
+
+
+def _load_default_agent_config() -> dict:
+    config_path = Path("src/minisweagent/config/default.yaml")
+    return yaml.safe_load(config_path.read_text())["agent"]
 
 
 def test_shell_escape():
@@ -14,7 +22,7 @@ def test_shell_escape():
     ):
         mock_prompt_session.prompt.side_effect = ["!echo hello world", "/y"]
 
-        agent = InteractiveAgent(mock_model, mock_env)
+        agent = InteractiveAgent(mock_model, mock_env, **_load_default_agent_config())
 
         result = agent._prompt_and_handle_special("test prompt > ")
 
@@ -36,7 +44,7 @@ def test_shell_escape_with_multiple_commands():
         # End with a mode switch command that doesn't recurse.
         mock_prompt_session.prompt.side_effect = ["!echo first", "!echo second", "/y"]
 
-        agent = InteractiveAgent(mock_model, mock_env)
+        agent = InteractiveAgent(mock_model, mock_env, **_load_default_agent_config())
         result = agent._prompt_and_handle_special("prompt > ")
 
         assert mock_run.call_count == 2
@@ -56,7 +64,7 @@ def test_shell_escape_with_regular_command():
     ):
         mock_prompt_session.prompt.side_effect = ["regular command", "/u"]
 
-        agent = InteractiveAgent(mock_model, mock_env)
+        agent = InteractiveAgent(mock_model, mock_env, **_load_default_agent_config())
         result = agent._prompt_and_handle_special("prompt > ")
 
         mock_run.assert_not_called()
